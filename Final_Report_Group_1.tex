@@ -1,0 +1,433 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    citecolor=Violet,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+    
+\urlstyle{same}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+    
+ \pagestyle{fancy}
+
+\fancyhead{}
+\fancyfoot{}
+\fancyfoot[C]{ Yiyi, Hieu, Lu, Sajit }
+% Set the right side of the footer to be the page number
+\fancyfoot[R]{\thepage}  
+    
+\begin{document}
+
+\title{%
+    Predicting Soccer Players’ Market Value With Regression Models}
+
+
+\author{\IEEEauthorblockN{Yiyi Zhang}
+\IEEEauthorblockA{\textit{Machine Learning Technologies,} \\
+\textit {Department of Data Analytics} \\
+\textit{San Jose State University}\\
+SID Last 4 digit: 4852 \\
+Email:yiyi.zhang@sjsu.edu}
+\and
+\IEEEauthorblockN{Hieu Tran}
+\IEEEauthorblockA{\textit{Machine Learning Technologies,} \\
+\textit {Department of Data Analytics} \\
+\textit{San Jose State University}\\
+SID Last 4 digit: 3773\\
+Email: hieu.tran@sjsu.edu}
+\and
+\IEEEauthorblockN{Lu Yang}
+\IEEEauthorblockA{\textit{Machine Learning Technologies,} \\
+\textit {Department of Data Analytics} \\
+\textit{San Jose State University}\\
+SID Last 4 digit: 7164 \\
+Email: Lu.yang@sjsu.edu}
+\and
+\IEEEauthorblockN{Sajit Valiya Kizhakke}
+\IEEEauthorblockA{\textit{Machine Learning Technologies,} \\
+\textit {Department of Data Analytics} \\
+\textit{San Jose State University}\\
+SID Last 4 digit: 0059 \\
+Email: sajit.valiyakizhakke@sjsu.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+Transfers of top soccer players typically require a lot of money to be invested, especially in the big leagues. For various reasons, obtaining an excellent assessment of soccer players all year long is valuable, rather than just when the player has recently transferred. Unfortunately, all the player evaluations, including the performance metrics and transfer prices, were done manually for a long time. This paper substitutes manual analysis with regression models for predicting soccer players' market value. We implement a practical application of machine learning in the field of sports analytics. We aim to achieve this by introducing several regression models, including lasso regression, ridge regression, polynomial regression, and random forest regression, which will predict soccer player's market value, also compare the accuracy and performance of these models, and find top features for a club to consider when and more crucially which players should be recommended to be a part of the club. Furthermore, because the market value estimate is based on key performance parameters, it may even help prevent subjective player evaluation and criticism by sports channels, critics, and newspapers. 
+\end{abstract}
+
+\begin{IEEEkeywords}
+Soccer Player, market value, lasso regression, ridge regression, polynomial regression, random forest
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+Soccer has remained the most renowned sport for a long time now. But when compared to its contemporaries like Basketball or Motor racing, soccer has yet to gain prominence in sports analytics. Owing to the numerous leagues in existence, complexities which arise from the distribution of countless players within these leagues, and the lack of an efficient approach to perform this has been the primary motivation to pursue this project. Clubs dispatch their scout teams to evaluate players, which is a prolonged and costly process. We intend to assess the proposed methodology's quality and demonstrate that the data-driven evaluation will tackle the issues faced by manual scouting. We also like to explore the relatively fewer applications of machine learning-based studies by deploying the data retrieved from Kaggle and transfermarkt, the website that holds authority in evaluating the player's value, into the regression models.
+
+
+
+\section{Literature Survey}
+
+We explored couples of literature surveys that discuss the soccer player's market value prediction. The following literature are helpful in understanding the features selection and model selection, which our group intended to highlight finding solutions with our approach.\par
+
+Soccer players have a significant impact on the club. A soccer player transferring to a new club not only increases the club's value but also affects the club's finance and fans. By predicting the market value of a player, the club management can have a good understanding and decide if they want to sign that player. Shuangxian has predicted soccer player value using multiple regression analysis.\cite{b1} She has chosen 15 independent variables, such as age, height, nationality, goals, assists, etc., and one dependent variable for the experiment. First, she studied the correlation between variables. Second, she went through the data wrangling process. Then, she applied a mathematical formula to analyze the variables with descriptive statistics. The analysis included count, mean, standard deviation, minimum, maximum, and quartile. The result from multiple regression analysis concluded that "APT1, AG will have a significant positive effect on player” \cite{b1} and “Age, CR will have a significant negative effect on player value. However, height, weight, position, APT2, AS, ACS, PG, PS, RC, YC, PR does not have an impact on Player value” \cite{b1}. Since the dataset included player data in 2018-2019 Premier League, this could be a reason that the accuracy was not high, only 68.4\% \cite{b1}. \par
+Li spoke that the Key Performance Indicators (KPI's) of players in most sports were examined by sports analysts or even coaches and experts who employ a notional approach \cite{b2}, i.e., analysis of video footage which was used to compile a statistical summary of events in addition to the number of goals scored, i.e., in soccer. However, human-based scouting has several drawbacks, including ineffective scaling to a large group of active players, the high-cost factor, the inability to scale to a large number of active players, and the presence of individual biases. The authors implement machine learning based methodologies, chiefly multiple linear regression and decision tree methods to overcome these inefficiencies. They executed machine learning algorithms to recognize meaningful patterns and establish specific structures. Various features of players were evaluated, such as the salary of players and the market value of players. In addition, it will use other features to establish and train the ML model for predicting the reasonable pay for a large number of players. The motivation is to explore the relations between different features of soccer players and their wages - mainly, how each feature influences their salaries or which features are most crucial in determining wages. While there are a variety of standards that can be used to evaluate the value of soccer players, the players' compensation provides one of the most intuitive and crucial indicators, which is why this study uses salary as a proxy to measure the value of players. Moreover, many Players' characteristics can affect their valuation. Still, players' value is primarily determined by their performance, divided into three factors: basic features, court performance, and club achievements.\par
+The value of soccer players affects not only the level of athletic sports but also the decisions managers make. Mustafa performed a comparative study of an objective quantitative method to estimate the market value of soccer players.\cite{b3}The project worked with the performance data of soccer players collected from sofifa.com, such as general information, shooting scores, passing scores, and other features showing the player's skills. The authors used four regression models, including linear regression, multiple linear regression, decision trees, and random forests, to predict the soccer players' value. They trained all four regression models and used the result of linear regression as a baseline to evaluate the performance of the models. In addition, the Mean Absolute Errors (MEA), the Mean Square Errors (MSE), and the Root Mean Square errors (RMSE) are used to compare the performance of these models as evaluation metrics. As a result, random forest regression achieved better performance and higher accuracy with the lowest MSE and RMSE. They believed that the model they built was promising for negotiations in the soccer player transfer market, which can provide an essential reference instead of traditional expert estimation. \par
+In a Machine Learning Ensembling Approach to Predicting Transfer Values, Aydemir use in-game performance, popularity, and transfer values to predict future values.\cite{b4} The model captures data/features from the real dynamic market, which comes from TransferMarkt, Wyscout, and Google trends.	The model considers two ways, log, and root, for long-tailed transfer fee, and distribution to reduce the effect of the outlier to normal prediction. For those just on the longtail data (superstar) prediction, without log or root transformation. And lightGBM as a machine learning model, RMSE (Root Mean Squared Error ) as an optimized target for its sensitivity to those data located on the longtail.In this paper, for optimization, they use bayesian hyperparameter + 4-fold cross-validation for log/root/no transformation lightGBM model. Compared with lasso regression and non-regularised regression models, they recommend lasso for this dataset with many features.
+
+
+
+\section{Methodology}
+\subsection{Experiment Design}
+This project uses a dataset from open resouce Kaggle. \cite{b5} This dataset contains soccer data from Transfermarkt, a sports information website. The data include games, clubs, players, player market valuations, player appearance records, etc. The dataset we use has six CSV files and a total of 83 columns combined. A GDP dataset from Kaggle, which contains the country's GDP in US dollars from 1960 to 2021, is used as a timeline and to indicate the inflation over the year. We use the Amazon S3 bucket to store the data, and Jupyter Notebook to write, run, and test code using Python. \par
+The ML pipeline is as follows: First, we upload the dataset downloaded from Kaggle on the AWS S3 bucket. Second, we connect the S3 bucket to Jupyter Notebook to ingest and pre-process data. The data wrangling process includes data exploration, finding the correlation between columns and files, extracting important features, joining tables, cleaning data, and aggregation. Third, we split the dataset into training and testing data. Then we build models using the algorithms that we choose with training data and validate the models using the K-folder validation method with testing data. Finally, we evaluate and compare each model.
+
+
+\subsection{Algorithms}
+In this project, we will predict soccer players' market value by using four algorithms: Lasso Regression, Ridge Regression, Polynomial Regression, and Random Forest. We will then compare all four models to evaluate which algorithm is the best fit for the prediction.
+\begin{itemize}
+    \item Lasso Regression is known as Least Absolute Shrinkage and Selection Operator Regression, a regularized regression model. Its cost function is based on linear regression, which minimizes the sum of squared error and one more term with a penalty factor on the absolute value of the regression coefficient. So, it has a trade-off between minimized error and the number of features.
+    \item Ridge regression is one of the linear regression models derived from the same primary regression equation \(y = mx + b\), where y is a dependent variable, x is an independent variable, m is slope or weight, and b is bias error. TThe cost function of ridge regression is \(Min(||Y – X(theta)||^2 + λ||theta||^2)\), where λ is a penalty term that shrinks the coefficient of features towards zero but not exactly zero. Ridge regression, also known as L2 regularization, is used to prevent multicollinearity and discourages large weights. The advantage of ridge regression over linear regression is that ridge regression avoids the overfitting of the model by reducing weights and biases. Ridge regression is useful when we do not want to overfit the training data and want the model to be more accurate on unseen data.
+    \item Polynomial regression is used to address the absence of a linear relationship between the predictor variable and the target variable. Polynomial regression refers to a type of multiple linear regression in which a polynomial equation is fit on the data by obtaining a curvilinear relationship between the dependent and independent variables, i.e., the initial features will be modified into polynomial features of a certain degree, which may be 2,3,...n. Polynomial regression obtains a better accuracy than linear regression as it can evaluate the nonlinear relationship in the data. \(y= b0+b1x1+ b2x12+ b2x13+...... bnx1n\) where b0  is the bias, b1, b2 … bn are the weights, and n indicates the degree of the polynomial.
+    \item Random forest is one ensemble method consisting of multiple independent decision trees. Each tree works with different sample data and different features generated by sampling with replacements from the dataset. In addition, each tree gets the classification prediction. The most voting for the classification of test data will result from prediction. As the advantage of random forest, higher accuracy makes the model competitive and powerful since it is collective intelligence. But less interpretation is still the disadvantage of random forest.
+
+
+
+\end{itemize}
+
+
+\subsection{Evaluation Methods}
+We will compare the prediction and the market value to get the RMSE (Root Mean Squared Error). We will also consider the MAE (Mean Absolute Error) for there are a lot of outliers in the dataset. In addition, we are going to use the coefficient of determination (\(R^2\)) to evaluate the models with the formula. The R-squared score represents the goodness of model fitting. Combining these three, we can know whether categorizing the data would increase or decrease prediction performance and which model performs best for players' value prediction.
+
+
+\subsection{Technical Difficulties}
+One of the difficulties that we have encountered is feature selection. There are so many columns/features that we need to consider because choosing fewer features or non-important features could affect the accuracy of the models. Therefore, we plan to use multiple feature selection methods to solve this problem. There are three kinds of ways to select features; filter method, wrapper method, and embedded method. For filter methods, we summarize the operations which will be used on our project, which would be like ranking the feature by correlation, setting the gain, and selecting the features. For instance, we will use a correlation matrix to show the relationship between each column/feature. For wrapper methods, we summarized it as running the model and comparing prediction scores by selecting different features, in this case, we consider it as an optimized method for model optimization, we would consider it after we get the first predicted results of our models. For embedded methods, we need trained models which can rank the features, get the rank of features, and then select the features by rank.
+Another difficulty we have encountered is encoding the categorical features such as country name, player’s position, and player’s dominant foot. We have tried to use label encoding, for example, the United States as number one and France as number two, but this seems quite wrong because if we encode like that, it means that we are assuming that the United States is less/smaller than France - one is less/smaller than two. Therefore, to solve this problem, we plan to use One-Hot Encoding which creates dummy variables for categorical features. For example, instead of one feature of a player's dominant foot, by using One-Hot Encoding, it converts into three features; left-foot, right-foot, and both-foot. Given a player with the left foot as dominant, it will be encoded as 1-0-0 where one is left-foot and the other zeros are right-foot and both-foot.
+
+
+
+
+\section{Implementation}
+\subsection{Data Preparation}
+Since we collected the dataset from two different resources, there is a total of six tables which are appearances, players, clubs, competitions, player\_valuations, uk\_gdp\_usd needed to be joined. As the first step, for data cleaning, we cleaned all six tables by dropping columns having no impact on the market value based on the literature research and self-knowledge. Moreover, we renamed some columns to clarify the similar meaning of different tables like years, and values. Then, we filled N/A or minimum numbers (1) into missing values instead of directly dropping instances in order to avoid producing biased estimates. We also calculated the mean of the market value for each year and the sum of the players' appearances by grouping players\_id. After that, for data transformation, we convert the date\_of\_birth column into year, convert the market value to million scales, and round 2 decimal place. In addition, we convert categorical variables to 1/0 by using One Hot Encoding. For example, we picked the top 20 countries and set the rest as others, then marked the values for each column. Finally, we combined all preprocessed data into one table through primary keys. The final processed data is saved in ‘proccessed\_data.csv’ with 63975 rows and 67 columns, shown in Fig 1,2.\par
+
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.3]{F1.png}}
+\caption{Processed Data}
+\label{bayespic}
+\end{center}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.3]{F2.png}}
+\caption{Processed Data}
+\label{bayespic}
+\end{center}
+\end{figure}
+The CSV file containing processed data is loaded into a dataframe for modeling. We extract the market value column, which is the label, and features (all other columns) from the processed dataframe and convert each of them to a NumPy array. We then standardize the features using StandardScaler from the Scikit-Learn library. Finally, we split data into training and test sets with a ratio of 0.8 and 0.2 respectively.
+
+\subsection{Models}
+\subsubsection{Lasso Regression}
+For Lasso Regression, we use AIC(Akaike information criterion) and BIC (Bayesian Information Criterion) to tune the model with the hyperparameter alpha. Both methods are included in the Scikit-Learn library. \par
+\(AIC=2k−2ln(L)\), where k is the feature number and L is maximized value of likelihood function of Lasso Regression. \(BIC=ln(n)k–2ln(L)\), where n is the observation number, k and L are the same as AIC.\par
+For the AIC is better on prediction and BIC is better on fitting, we focus more on prediction, so choose the alpha from AIC, get the alpha is 0.0006164712757976496, which has the lowest criterion. And in this condition, the \(R^2\) score grows from  0.3938 with a random select alpha 0.1 to 0.4275 with this best alpha, shown in Fig 3.
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F3.png}}
+\caption{Lasso Regression}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+
+
+\subsubsection{Ridge Regression}
+The Ridge regression model is implemented by using the Scikit-Learn library. We tune the model by hyperparameter alpha. We use the k-fold cross-validation method to choose the best alpha parameter which generates the highest r2 score of the validation set. For instance, with three folds and a range of alphas from zero to 1000, the ridge regression model has the highest validation r2 score at alpha 111.111. With this alpha, the model has a training r2 score of 0.48561 and a validation r2 score of 0.48371. Based on the result of validation in Fig 4, we conclude that the mode is underfitting because both the training and validation r2 score are low. Underfitting is when training error and validation error are very low. We plan to solve this underfitting problem by increasing the complexity of the model which decreases the bias and increases the variance. There are several ways to increase the complexity of the model including reducing regularization, and adding more features.
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F4.png}}
+\caption{Finding The Best Alpha Parameter for Ridge Regression Model}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+\subsubsection{Polynomial Regression}
+We analyze the prediction accuracy of the model for various degrees of polynomials. Hence, a Multivariate Polynomial Regression analysis is implemented. We’ve first selected the features that have the highest impact on the player’s market value and trained the regression model accordingly. We evaluated the model performance by finding out several evaluation metrics like root mean squared, r squared or co-efficient of determination and also the mean absolute error. The best suited polynomial degree for the dataset is plotted against the mean squared error. From Fig 5, we see that model performed best when the degree is 5, meaning a 'quintic' function or the fifth degree polynomial helped us predict the player's market value accurately when compared with the rest.
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F5.png}}
+\caption{Polynomial Regression Accuracy}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+
+\subsubsection{Random Forest Regression}
+Random Forest Regression was implemented by using Scikit-Learn Library. We normalized the features of training data in order to enhance the performance and metrics before starting training. We improved the model by using hyperparameter tuning including the number of decision trees, the number of features at each split, the max depth of each tree, and so on. We set up the grid instead of using the default value provided by the Scikit-Learn package, and randomly searched parameters across 100 different combinations by using 5-Fold cross validation, shown in Fig 6. Finally, we applied the best parameters to the random forest model.
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F6.png}}
+\caption{Search Best Paramaters}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+\subsection{Evaluation Metrics}
+To evaluate the performance of models, we use multiple metrics from the Scikit-Learn library including Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and R-squared (R2).\par
+MAE estimates the mean error size in predictions in spite of directions, with formula:
+\begin{equation}
+MAE = \frac{1}{n}\sum_{n}^{i=1}\left| x_{i}-y_{i}\right|
+\end{equation}
+where \(y_{i}\) is the prediction value of market value, n is the number of market values observation, \(x_{i}\) is one of the market values for players.\cite{b6} \par
+RMSE is the square root of MSE which is the square difference between the truth and prediction output and calculates the mean of the values for each data point. The formula is
+\begin{equation}
+RMSE = \sqrt{\frac{\sum_{N}^{i=1}(x_{i}-\hat{x})^2}{N}}
+\end{equation}
+where i is a player\_id, N is the number of market values observed, \(x_{i}\) is the actual transfer market value, \(\hat{x}\) is a prediction value. \cite{b7} \par
+
+The coefficient of determination is related to MSE with formula
+\begin{equation}
+R^{2} = \frac{1-MSE(model)}{MSE(baseline)}
+\end{equation}
+In addition, the mean and standard deviation of coefficient determination i.e. r-squared is also found in polynomial regression along with the standard deviation of mean absolute error.
+
+
+
+
+
+\section{Results}
+\subsection{Data Analysis}
+To understand the data inside the datasets used in this project, we perform exploratory data analysis (EDA). It helps us to find hidden patterns, trends, or insights from the data. It also points out outliers, identifies missing values, and checks for duplicates. \par
+The first step of the EDA is to load the data. Datasets are loaded using Pandas dataframe. To have a glance at the structure of the dataset, we use the function df.info() to show the information of the dataframe including the number of records, number of columns, column name, column type, and memory usage.\par
+Next, we count the number of null values for each column by using the function df.isnull().sum(). This step is very important because it reveals which column is needed to handle missing values. Then, we check for duplicate records using the function df.duplicated().any(). Fortunately, there are no duplicate values in the datasets. \par
+For visualization, seaborn library is used to plot the charts. First, we perform a univariate analysis. We plot the distribution of players’ ages at the year of market valuation in the Fig 7. It looks like a normal distribution.
+
+
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F7.png}}
+\caption{Player’s age distribution}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+We use a bar chart to show the count of the player's position shown in Fig 8.
+
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F8.png}}
+\caption{Player’s position distribution}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+We use a boxplot to show outliers in the market value column shown in Fig 9. The reason there are so many outliers in market value is that there are a few players who are outstanding and evaluated at a higher value.
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F9.png}}
+\caption{Market value outliers}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+Next, we perform bivariate analysis using scatter plots. Fig 10 shows the relationship between the club’s total market value and the player’s market value. Players' market value tends to increase as their current club's total market value increases. In other words, players from popular and wealthy clubs will be more likely evaluated at a higher value.
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F10.png}}
+\caption{Bivariate analysis}
+\label{bayespic}
+\end{center}
+\end{figure}
+Fig 11 shows the relationship between a player's position and goals. The attack position tends to have more goals than other positions.
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F11.png}}
+\caption{Player Position and goals comparison}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+To show the relationship between each column, we use a heatmap and correlation matrix shown in Fig 12. Based on the heatmap, we can easily see that goals, assists, and minutes\_played have a higher correlation coefficient which indicates that they somewhat relate to the market value which is the label.
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F12.png}}
+\caption{Correlation heatmap}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+
+\subsection{Compare Models}
+The Table 1 below shows the mean absolute error, Root mean square error, and the coefficient of determination for all four regression models. \par
+\begin{table}[h]
+\large
+\begin{center}
+% \begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|c|c|c|c|c|}
+\hline \bf Metric & \bf Lasso & \bf Ridge & \bf Polynomial & \bf RF   \\ \hline
+MAE & 3.0484 & 2.8327 & 2.1922 & 1.8002 \\
+RMSE & 6.0334 & 5.3487 & 5.0058 & 4.0307 \\
+R2 & 0.4343 & 0.5041 & 0.5656 & 0.7184 \\
+\hline
+\end{tabular}
+\end{center}
+\caption{\label{fontsizes} Comparing models by evaluation metrics}
+\end{table}
+We can see that the random forest gets the best results compared to other models. It demonstrates that Random Forest Regression does a better job of evaluating the market value of the football players.
+We rank features with both Lasso model and Random Forest, the top 10 features in Lasso model like below Fig 13, And top 10 features in Random Forest model like below Fig 16: \par 
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F15.png}}
+\caption{Top 10 features- Lasso regression mode}
+\label{bayespic}
+\end{center}
+\end{figure}
+The most important feature is the same, and the latter 3 features are also the same but with different rank. \par
+For the polynomial regression, we have implemented the correlation matrix to understand the top features shown in Fig 14. 
+
+
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F17.png}}
+\caption{Feature selection-Polynomial regression}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+
+\subsection{Discussion}
+We analyzed the market value data, found the dataset has many outliers and we had to mitigate this, shown in Fig 15. We’ve performed the necessary data preprocessing steps to get a clean dataset.
+
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F13.png}}
+\caption{Outliers evaluation}
+\label{bayespic}
+\end{center}
+\end{figure}
+And we tried to categorize the player by market value, bigger than 5 million as one category and others as another category, the scores getting worse. But after we logged the market value, the score increased by about 40\%, and the top rated feature changes from club market value to players minutes played, shown in Table 2.
+
+\begin{table}[h]
+\small
+\begin{center}
+% \begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|c|c|c|c|c|}
+\hline \bf Metric  & \bf Original & \bf Category1 & \bf Category2 & \bf market val  \\ \hline
+MAE & 3.0484 & 7.6354 & 0.6675 & 0.7427 \\ \hline
+RMSE & 6.0334 & 11.4389 & 0.9334 & 0.9541 \\ \hline
+R2 & 0.4343 & 0.3671 & 0.3444 & 0.5907 \\ \hline
+Top feature & 1& 1& 1& 2 \\
+\hline
+\end{tabular}
+\end{center}
+\caption{\label{fontsizes} Lasso Regression Metric Comparison \\
+1: club\_total\_market\_value\_in\_million \\
+2: minutes\_played}
+\end{table}
+
+Moreover, we calculate the importance of each feature for random forest regression. Fig 16 shows the top 10 importance of predictors according to the input training features and model of random forest. From the chart, we can see that ‘club\_total\_market\_value in million’, ‘minutes\_played’, and ‘goals’ determine players’ value in the market mostly. 
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F14.png}}
+\caption{Top 10 features in random forest regression}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+\section{Conclustion and Reconmmendations}
+
+
+\subsection{Summary and Conclusions}
+We have utilized regression analysis to predict the market value of the players. We divided the project workflow into four stages. The first being the ingestion stage wherein we procured a dataset and stored it in the local system for further use. The second stage is data wrangling/exploration stage. In the penultimate phase we prepared the chosen data for  regression modeling. And final stage is the modeling stage in which we executed and measured the performance of all the models. \par
+ Multiple datasets have been chosen to fulfill our goal of predicting the player’s transfer market value. Performed the necessary data wrangling on the cleaned dataset. We then build the four algorithms to compare and find out the best suited model for the dataset at hand. \par
+We have implemented several novel methods in our project such as one-hot encoding, random selection of hyperparameters for feature selection.\par
+The top 3 important features related to players' market value are ‘club\_total\_market\_value in million’, ‘minutes\_played’, and ‘goals’, which means the market value of the club that the player is a part of and the time a player plays in soccer games and the overall goals scored by the player. When a club considers new players, these information could affect the players market value most. \par
+Fig.17 provides a comparison between the predicted market value and the actual market value. We can evaluate the model performance based on this visualization. In the figure the identity line classifies the actual and predicted values. \par
+ As most of the data points close to identity line we can conclude that models perform significantly well. Meaning the models predicted the market values accurately with little or no errors. 
+. 
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{F16.png}}
+\caption{Comparison of actual v/s predicted market value}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+\subsection{Recommendations for Future Works}
+As we mentioned above in chapter 6, we may focus on clustering for soccer players and use random forest regression to do predictions for different clusters. Also, a method to preprocess this kind of distribution of players' market value can be considered in the future.\par
+Employing devices which can handle higher RAM usage for model processing can also be taken into consideration as modelling have encountered memory usage complexities.\par
+With the advent of sports analytics, not just soccer but various other sports can utilize machine learning to analyze player and team performances. With regards to this project, as the data sources keep piling up, several crucial factors such as media coefficient, the real time analysis of on-field statistics can be included in predicting the market value too.
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+\begin{thebibliography}{00}
+\bibitem{b1} Shuangxian Li. (2020). Multiple regression model for predicting soccer player value in English Primer League. The Frontiers of Society, Science and Technology, Vol. 2 Issue 15:132-143. https://doi.org/10.25236/FSST.2020.021516
+\bibitem{b2} Li, C., Kampakis, S., & Treleaven, P.C. (2022). Machine Learning Modeling to Evaluate the Value of Football Players. https://doi.org/10.48550/arXiv.2207.11361
+\bibitem{b3} M. A. Al-Asadi and S. Tasdemır, "Predict the Value of Football Players Using FIFA Video Game Data and Machine Learning Techniques," in IEEE Access, vol. 10, pp. 22631-22645, 2022, https://doi.org/10.1109/ACCESS.2022.3154767 
+\bibitem{b4} Aydemir, A.E., Taskaya Temizel, T. & Temizel, A. (2022). A Machine Learning Ensembling Approach to Predicting Transfer Values. SN COMPUT. SCI. 3, 201. https://doi.org/10.1007/s42979-022-01095-z
+\bibitem{b5} [Online]. Available: https://www.kaggle.com/datasets/davidcariboo/player-scores?select=appearances.csv. 
+\bibitem{b6} [Online]. Available: https://en.wikipedia.org/wiki/Mean\_absolute\_error.
+\bibitem{b7} [Online]. Available: https://en.wikipedia.org/wiki/Root\_mean\_square\_deviation.  
+
+
+
+
+
+
+
+\end{thebibliography}
+\vspace{12pt}
+\appendix
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{A1.png}}
+\label{bayespic}
+\end{center}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{A2.png}}
+\label{bayespic}
+\end{center}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth,scale=0.5]{A3.png}}
+\label{bayespic}
+\end{center}
+\end{figure}
+
+\end{document}
